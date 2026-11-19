@@ -1,0 +1,7 @@
+# Flutter / Dart
+.dart_tool/
+.widget_preview/
+build/
+
+# Rust
+target/
