@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+  <head>
+    <base href="$FLUTTER_BASE_HREF">
+    <meta charset="UTF-8">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f4f3ee">
+    <title>MiEvento Seguimiento</title>
+  </head>
+  <body>
+    <script>
+      window.MiEventoRustReady = new Promise((resolve, reject) => {
+        window.__miEventoRustResolve = resolve;
+        window.__miEventoRustReject = reject;
+      });
+    </script>
+    <script type="module">
+      const encodeResult = (operation) => {
+        try {
+          return JSON.stringify({ ok: true, value: operation() });
+        } catch (error) {
+          return JSON.stringify({
+            ok: false,
+            error: error instanceof Error ? error.message : String(error),
+          });
+        }
+      };
+
+      try {
+        const rust = await import('./pkg/mi_evento_seguimiento.js');
+        await rust.default();
+        window.MiEventoRust = {
+          calculateTotal: (chairs, tables, decoration, delivery) =>
+            encodeResult(() =>
+              rust.calculate_total(chairs, tables, decoration, delivery).toString(),
+            ),
+          validateAvailability: (reservations, id, date, chairs, tables) =>
+            encodeResult(() => {
+              rust.validate_availability(reservations, id, date, chairs, tables);
+              return null;
+            }),
+          validatePayment: (amount, method, status, totalCents, paidCents) =>
+            encodeResult(() =>
+              rust.validate_payment(
+                amount,
+                method,
+                status,
+                BigInt(totalCents),
+                BigInt(paidCents),
+              ).toString(),
+            ),
+        };
+        window.__miEventoRustResolve(true);
+      } catch (error) {
+        window.__miEventoRustReject(error);
+      }
+    </script>
+    <script src="flutter_bootstrap.js" async></script>
+  </body>
+</html>

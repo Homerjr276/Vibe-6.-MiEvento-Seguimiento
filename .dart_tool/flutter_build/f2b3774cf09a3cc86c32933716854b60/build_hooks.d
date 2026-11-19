@@ -1,0 +1,1 @@
+ C:\\Users\\VICTUS\ HP\\OneDrive\\Imágenes\\Desktop\\merca\ -\ Alfonso\ -\ c4\\VIBE_6\\.dart_tool\\flutter_build\\f2b3774cf09a3cc86c32933716854b60\\build_hooks_result.json: 
